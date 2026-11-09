@@ -141,3 +141,94 @@ writeLines(
 
 cat("Protein accession and FASTA saved successfully!\n")
 
+
+
+
+system2("C:/Program Files/Git/bin/git.exe",
+        c("-C", shQuote(getwd()), "add",
+          "analysis.R",
+          "data/TPM1_protein.fasta",
+          "results/protein_accession.txt"))
+
+
+system2("C:/Program Files/Git/bin/git.exe",
+        c("-C", shQuote(getwd()), "commit", "-m",
+          shQuote("Retrieve TPM1 protein accession and FASTA")))
+
+
+
+system2("C:/Program Files/Git/bin/git.exe",
+        c("-C", shQuote(getwd()), "push"))
+
+
+
+
+
+
+
+
+# Step 4: Amino acid composition
+
+# Read the TPM1 protein FASTA file
+fasta_lines <- readLines("data/TPM1_protein.fasta")
+
+# Remove the FASTA header and combine sequence lines
+protein_sequence <- paste(
+  fasta_lines[!grepl("^>", fasta_lines)],
+  collapse = ""
+)
+
+# Count amino acids
+amino_acids <- c(
+  "A", "R", "N", "D", "C", "Q", "E", "G", "H", "I",
+  "L", "K", "M", "F", "P", "S", "T", "W", "Y", "V"
+)
+
+aa_counts <- sapply(amino_acids, function(aa) {
+  lengths(regmatches(protein_sequence, gregexpr(aa, protein_sequence)))
+})
+
+# Create composition table
+aa_composition <- data.frame(
+  Amino_Acid = amino_acids,
+  Count = as.numeric(aa_counts)
+)
+
+aa_composition$Percentage <- 
+  aa_composition$Count / nchar(protein_sequence) * 100
+
+# Save the table
+write.csv(
+  aa_composition,
+  "results/amino_acid_composition.csv",
+  row.names = FALSE
+)
+
+# Print protein length and most abundant amino acids
+cat("Protein length:", nchar(protein_sequence), "amino acids\n")
+
+print(
+  aa_composition[order(-aa_composition$Count), ][1:3, ]
+)
+
+# Create bar plot
+aa_plot <- ggplot(aa_composition,
+                  aes(x = Amino_Acid, y = Count)) +
+  geom_col() +
+  labs(
+    title = "Amino Acid Composition of TPM1",
+    x = "Amino Acid",
+    y = "Count"
+  ) +
+  theme_minimal()
+
+# Save plot
+ggsave(
+  "figures/01_amino_acid_composition.png",
+  plot = aa_plot,
+  width = 10,
+  height = 6
+)
+
+cat("Amino acid composition and plot saved successfully!\n")
+
