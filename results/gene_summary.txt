@@ -1,0 +1,10 @@
+Gene symbol: TPM1
+NCBI Gene ID: 7168
+Official name: TPM1
+Description: tropomyosin 1
+Chromosome: 15
+Map location: 15q22.2
+Transcript: NM_001018005.2
+ClinVar Variation ID: 12456
+Protein variant: p.Asp175Asn
+Source: NCBI Gene (https://www.ncbi.nlm.nih.gov/gene/)
