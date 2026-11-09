@@ -1,0 +1,5 @@
+Gene: TPM1
+Assigned transcript: NM_001018005.2
+Matching protein accession: NP_001018005.1
+ClinVar Variation ID: 12456
+Source: NCBI Nucleotide and Protein

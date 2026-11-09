@@ -70,3 +70,74 @@ gene_info <- c(
 writeLines(gene_info, "results/gene_summary.txt")
 
 cat("Gene information saved successfully!\n")
+
+
+
+
+
+system2("C:/Program Files/Git/bin/git.exe",
+        c("-C", shQuote(getwd()), "add", "analysis.R", "results/gene_summary.txt"))
+
+system2("C:/Program Files/Git/bin/git.exe",
+        c("-C", shQuote(getwd()), "commit", "-m",
+          shQuote("Add TPM1 gene summary")))
+
+system2("C:/Program Files/Git/bin/git.exe",
+        c("-C", shQuote(getwd()), "push"))
+
+
+
+
+
+
+# ==========================================
+# STEP 2: Retrieve TPM1 protein accession
+# ==========================================
+
+# Fetch the assigned transcript's GenBank record
+transcript_record <- entrez_fetch(
+  db = "nuccore",
+  id = transcript_accession,
+  rettype = "gb",
+  retmode = "text"
+)
+
+# Extract the NP_ protein accession
+protein_accession <- regmatches(
+  transcript_record,
+  regexpr("NP_[0-9]+\\.[0-9]+", transcript_record)
+)
+
+# Display the accession
+print(protein_accession)
+
+# Fetch the protein FASTA sequence
+protein_fasta <- entrez_fetch(
+  db = "protein",
+  id = protein_accession,
+  rettype = "fasta",
+  retmode = "text"
+)
+
+# Save protein FASTA
+writeLines(
+  protein_fasta,
+  "data/TPM1_protein.fasta"
+)
+
+# Save accession information
+accession_info <- c(
+  paste("Gene:", gene_symbol),
+  paste("Assigned transcript:", transcript_accession),
+  paste("Matching protein accession:", protein_accession),
+  paste("ClinVar Variation ID:", clinvar_id),
+  "Source: NCBI Nucleotide and Protein"
+)
+
+writeLines(
+  accession_info,
+  "results/protein_accession.txt"
+)
+
+cat("Protein accession and FASTA saved successfully!\n")
+
