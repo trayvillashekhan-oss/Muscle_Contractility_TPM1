@@ -1,0 +1,12 @@
+Gene: TPM1
+Transcript: NM_001018005.2
+Coding variant: c.523G>A
+Protein variant: p.Asp175Asn
+ClinVar Variation ID: 12456
+Variant type: Missense variant
+Associated condition: Hypertrophic cardiomyopathy
+ClinVar classification: Pathogenic
+Review status: Multiple submitters, no conflicts
+Last evaluated: January 31, 2026
+Source: https://www.ncbi.nlm.nih.gov/clinvar/variation/12456/
+Date accessed: November 9, 2026
